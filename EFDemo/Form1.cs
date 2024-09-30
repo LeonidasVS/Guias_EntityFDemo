@@ -35,7 +35,79 @@ namespace EFDemo
             };
 
             dataGridView1.DataSource = listado;
+            LlenarCampos(cliente);
 
+        }
+
+        private void btnInsertar_Click(object sender, EventArgs e)
+        {
+            var cliente = crearCleinte();
+
+            var resultado = customerRepo.InsertarClientes(cliente);
+
+            if (resultado>0)
+            {
+                MessageBox.Show("Cliente Insertado", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private Customers crearCleinte()
+        {
+            var cliente = new Customers() { 
+            
+                CustomerID=txtCustomerID.Text,
+                CompanyName = txtCompanyName.Text,
+                ContactName=txtContactName.Text,
+                ContactTitle=txtContactTitle.Text,
+                Address=txtAddress.Text,
+            };
+
+            return cliente;
+        }
+        private void LlenarCampos(Customers customer)
+        {
+
+            if (customer!=null)
+            {
+                txtCustomerID.Text = customer.CustomerID;
+                txtCompanyName.Text = customer.CompanyName;
+                txtContactName.Text = customer.ContactName;
+                txtContactTitle.Text = customer.ContactTitle;
+                txtAddress.Text = customer.Address;
+            }
+            else
+            {
+                MessageBox.Show("Cliente no encontrado");
+            }
+        }
+
+        private void btnActualizar_Click(object sender, EventArgs e)
+        {
+            var clienteUpdate = crearCleinte();
+
+            var resultado = customerRepo.UpdateCliente(clienteUpdate);
+
+            if (resultado>0)
+            {
+                MessageBox.Show("Cliente Actualizado", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                List<Customers> cliente = new List<Customers>
+                {
+                    clienteUpdate
+                };
+
+                dataGridView1.DataSource = cliente;
+            }
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+
+            var eliminados = customerRepo.ELiminarCLiente(txtCustomerID.Text);
+
+            if (eliminados>0)
+            {
+                MessageBox.Show("Cliente Eliminado", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }
